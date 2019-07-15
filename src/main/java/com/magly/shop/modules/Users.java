@@ -28,5 +28,10 @@ public class Users {
     private List<UserAddress> addresses;
 
     @OneToMany(mappedBy = "userOrder")
+    @Getter @Setter
     private List<Orders> orders;
+
+    @ManyToMany
+    @Getter @Setter
+    List<UserPermissions> userPermissions;
 }

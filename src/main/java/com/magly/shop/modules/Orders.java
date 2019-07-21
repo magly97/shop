@@ -1,9 +1,11 @@
 package com.magly.shop.modules;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,7 +19,7 @@ public class Orders {
     @Getter @Setter
     private String status;
     @Getter @Setter
-    private String dataXD;
+    private Date dateStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -25,5 +27,7 @@ public class Orders {
     private Users userOrder;
 
     @ManyToMany(mappedBy = "orders")
+    @JsonIgnoreProperties("orders")
     private List<Product> products;
+
 }

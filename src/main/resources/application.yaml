@@ -23,3 +23,9 @@ logging:
     org.hibernate:
       SQL: DEBUG
       type: TRACE
+
+#App Properties
+magly:
+  app:
+    jwtSecret: jwtBaguvixHesoyam
+    jwtExpiration: 86400

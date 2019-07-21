@@ -4,20 +4,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
-public class UserPermissions {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
     private Long id;
     @Getter
-    private String type;
+    private String name;
 
-    @ManyToMany(mappedBy = "userPermissions")
+    @ManyToMany(mappedBy = "roles")
     @Getter @Setter
-    List<Users> user;
+    Set<Users> user;
 
 }

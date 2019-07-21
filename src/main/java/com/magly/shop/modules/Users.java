@@ -1,10 +1,15 @@
 package com.magly.shop.modules;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Users {
@@ -14,12 +19,21 @@ public class Users {
     @Getter
     private Long id;
 
+    @NotNull
+    @Getter @Setter
+    private String username;
+
     @Getter @Setter
     private String firstName;
+
     @Getter @Setter
     private String lastName;
+
+    @NotNull
     @Getter @Setter
     private String password;
+
+    @Email @NotNull
     @Getter @Setter
     private String email;
 
@@ -33,5 +47,17 @@ public class Users {
 
     @ManyToMany
     @Getter @Setter
-    List<UserPermissions> userPermissions;
+    Set<Role> roles = new HashSet<>();
+
+    public Users() {
+    }
+
+    public Users(String firstName, String lastName, String username, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
 }

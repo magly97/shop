@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/product")
+@RequestMapping("api/product")
 public class ProductController {
 
     @Autowired
@@ -24,10 +24,10 @@ public class ProductController {
         return productService.createProduct(productForm);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateProduct(@RequestBody Product product) {
-        return productService.updateProduct(product);
+    public ResponseEntity<?> updateProduct(@RequestBody Product product, @PathVariable Long id) {
+        return productService.updateProduct(product, id);
     }
 
     @DeleteMapping("/{id}")

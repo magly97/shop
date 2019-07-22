@@ -5,7 +5,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProductForm {
 
@@ -20,6 +21,6 @@ public class ProductForm {
     private Double price;
 
     @Getter @Setter
-    private List<String> category;
+    private Set<String> category = new HashSet<>();
 
 }

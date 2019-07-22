@@ -8,7 +8,7 @@ public interface ProductService {
 
     ResponseEntity<?> createProduct(ProductForm productForm);
 
-    ResponseEntity<?> updateProduct(Product product);
+    ResponseEntity<?> updateProduct(Product product, Long id);
 
     ResponseEntity<?> deleteProduct(Long id);
 

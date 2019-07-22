@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 import com.magly.shop.message.request.LoginForm;
 import com.magly.shop.message.request.SignUpForm;
-import com.magly.shop.services.AuthService;
+import com.magly.shop.services.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    private AuthService authService;
+    private AuthServiceImpl authService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {

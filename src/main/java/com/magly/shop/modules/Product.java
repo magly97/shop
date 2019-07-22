@@ -22,7 +22,7 @@ public class Product {
 
     @NotNull
     @Getter @Setter
-    private double price;
+    private Double price;
 
     @ManyToMany
     @JsonIgnoreProperties("products")

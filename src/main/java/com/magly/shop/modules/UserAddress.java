@@ -1,5 +1,6 @@
 package com.magly.shop.modules;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,7 +32,9 @@ public class UserAddress {
     private String zipCode;
 
     @ManyToOne
+    @Getter @Setter
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("addresses")
     private Users userAddress;
 
 }

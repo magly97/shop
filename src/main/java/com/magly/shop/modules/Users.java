@@ -38,8 +38,9 @@ public class Users {
     private String email;
 
     @OneToMany(mappedBy = "userAddress")
+    @JsonIgnoreProperties("userAddress")
     @Getter @Setter
-    private List<UserAddress> addresses;
+    private Set<UserAddress> addresses = new HashSet<>();
 
     @OneToMany(mappedBy = "userOrder")
     @Getter @Setter
@@ -47,6 +48,7 @@ public class Users {
 
     @ManyToMany
     @Getter @Setter
+    @JsonIgnoreProperties("user")
     Set<Role> roles = new HashSet<>();
 
     public Users() {

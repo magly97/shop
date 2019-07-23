@@ -1,5 +1,6 @@
 package com.magly.shop.modules;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     @Getter @Setter
+    @JsonIgnoreProperties("roles")
     Set<Users> user;
 
 }

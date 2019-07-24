@@ -2,6 +2,7 @@ package com.magly.shop.controllers;
 
 import com.magly.shop.message.request.ProductForm;
 import com.magly.shop.modules.Product;
+import com.magly.shop.services.OrderService;
 import com.magly.shop.services.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,9 @@ public class ProductController {
 
     @Autowired
     private ProductServiceImpl productService;
+
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
@@ -44,5 +48,10 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
+    }
+
+    @PutMapping("{id}/add")
+    public ResponseEntity<?> addProductToOrder(@PathVariable Long id) {
+        return orderService.addProductToOrder(id);
     }
 }

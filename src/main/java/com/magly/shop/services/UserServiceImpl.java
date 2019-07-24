@@ -1,7 +1,9 @@
 package com.magly.shop.services;
 
 import com.magly.shop.message.response.ResponseMessage;
+import com.magly.shop.modules.Role;
 import com.magly.shop.modules.Users;
+import com.magly.shop.repositories.RoleRepository;
 import com.magly.shop.repositories.UsersRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public ResponseEntity<?> getUser() {
@@ -47,8 +52,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> updateUser(Users user) {
 
-        Users existingUser = usersRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("User not exist"));
+        if (usersRepository.findById(user.getId()).isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Wrong form or user not exist"));
+        }
+
+        Users existingUser = usersRepository.findById(user.getId()).get();
 
         if (usersRepository.existsByUsername(user.getUsername()) && !existingUser.getUsername().equals(user.getUsername())) {
             return ResponseEntity.badRequest().body(new ResponseMessage("Username already used."));
@@ -67,5 +75,27 @@ public class UserServiceImpl implements UserService {
 
         return ResponseEntity.ok(new ResponseMessage("Updated complete."));
 
+    }
+
+    @Override
+    public ResponseEntity<?> userAddAdminRole(Long id) {
+        if (usersRepository.findById(id).isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("User not exist"));
+        }
+        Users user = usersRepository.findById(id).get();
+        user.getRoles().add(roleRepository.findByName("ROLE_ADMIN").orElseThrow(() -> new RuntimeException("Role not found")));
+        usersRepository.saveAndFlush(user);
+        return ResponseEntity.ok(new ResponseMessage("Admin role added"));
+    }
+
+    @Override
+    public ResponseEntity<?> userRemoveAdminRole(Long id) {
+        if (usersRepository.findById(id).isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("User not exist"));
+        }
+        Users user = usersRepository.findById(id).get();
+        user.getRoles().remove(roleRepository.findByName("ROLE_ADMIN").orElseThrow(() -> new RuntimeException("Role not found")));
+        usersRepository.saveAndFlush(user);
+        return ResponseEntity.ok(new ResponseMessage("Admin role remove"));
     }
 }

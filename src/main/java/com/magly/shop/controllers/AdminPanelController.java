@@ -2,6 +2,7 @@ package com.magly.shop.controllers;
 
 import com.magly.shop.modules.Category;
 import com.magly.shop.services.CategoryServiceImpl;
+import com.magly.shop.services.OrderServiceImpl;
 import com.magly.shop.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class AdminPanelController {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private OrderServiceImpl orderService;
 
     @GetMapping("/category")
     public ResponseEntity<?> getCategoryList() {
@@ -46,6 +50,26 @@ public class AdminPanelController {
     @GetMapping("/user")
     public ResponseEntity<?> getUserList() {
         return userService.getUserList();
+    }
+
+    @PutMapping("/user/up/{id}")
+    public ResponseEntity<?> userAddAdminRole(@PathVariable Long id) {
+        return userService.userAddAdminRole(id);
+    }
+
+    @PutMapping("/user/down/{id}")
+    public ResponseEntity<?> userRemoveAdminRole(@PathVariable Long id) {
+        return userService.userRemoveAdminRole(id);
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<?> getAllOrders() {
+        return orderService.getAllOrders();
+    }
+
+    @PutMapping("/orders/ship/{id}")
+    public ResponseEntity<?> shippedOrder(@PathVariable Long id) {
+        return orderService.shippedOrder(id);
     }
 
 

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -38,7 +39,10 @@ public class UserAddressServiceImpl implements UserAddressService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
 
-        Users user = usersRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("user not exist"));
+        if(usersRepository.findByUsername(username).isEmpty()){
+            return ResponseEntity.badRequest().body(new ResponseMessage("User error"));
+        }
+        Users user = usersRepository.findByUsername(username).get();
         address.setUserAddress(user);
 
         userAddressRepository.saveAndFlush(address);
@@ -47,8 +51,11 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     public ResponseEntity<?> updateAddress(UserAddress address) {
-        UserAddress existingAddress = userAddressRepository.findById(address.getId())
-                .orElseThrow(() -> new RuntimeException("address not exist"));
+
+       if(userAddressRepository.findById(address.getId()).isEmpty()){
+           return ResponseEntity.badRequest().body(new ResponseMessage("Cannot find address to update"));
+       }
+        UserAddress existingAddress = userAddressRepository.findById(address.getId()).get();
 
         BeanUtils.copyProperties(address, existingAddress);
         userAddressRepository.saveAndFlush(existingAddress);
@@ -60,15 +67,14 @@ public class UserAddressServiceImpl implements UserAddressService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
 
-        Set<UserAddress> userAddressesSet = new HashSet<>();
-        userAddressRepository.findById(id).stream()
+        Optional<UserAddress> userAddress = userAddressRepository.findById(id).stream()
                 .filter(address -> address.getUserAddress().getUsername().equals(username))
-                .forEach(userAddressesSet::add);
+                .findFirst();
 
-        if (userAddressesSet.isEmpty()) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Address not exist"));
+        if (userAddress.isPresent()) {
+            return ResponseEntity.ok(userAddress.get());
         } else {
-            return ResponseEntity.ok(userAddressesSet);
+            return ResponseEntity.badRequest().body(new ResponseMessage("Address not exist"));
         }
     }
 

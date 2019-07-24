@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -25,10 +26,10 @@ public class Product {
     @Getter @Setter
     private Double price;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "products")
     @JsonIgnoreProperties("products")
     @Getter @Setter
-    List<Orders> orders;
+    List<Orders> orders = new ArrayList<>();
 
     @ManyToMany
     @JsonIgnoreProperties("products")

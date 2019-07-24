@@ -1,11 +1,15 @@
 package com.magly.shop.controllers;
 
+import com.magly.shop.modules.Product;
 import com.magly.shop.modules.UserAddress;
 import com.magly.shop.modules.Users;
+import com.magly.shop.services.OrderService;
+import com.magly.shop.services.OrderServiceImpl;
 import com.magly.shop.services.UserAddressServiceImpl;
 import com.magly.shop.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
@@ -18,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserAddressServiceImpl userAddressService;
+
+    @Autowired
+    private OrderServiceImpl orderService;
 
     @GetMapping
     public ResponseEntity<?> getUserByUsername() {
@@ -57,6 +64,32 @@ public class UserController {
     @GetMapping("/address")
     public ResponseEntity<?> getAddressList() {
         return userAddressService.getAddressList();
+    }
+
+
+    @GetMapping("/orders")
+    public ResponseEntity<?> getUserOrderList() {
+        return orderService.getUserOrderList();
+    }
+
+    @GetMapping("/orders/{id}")
+    public ResponseEntity<?> getOrderById(@PathVariable Long id) {
+        return orderService.getOrderById(id);
+    }
+
+    @GetMapping("/cart/remove/")
+    public ResponseEntity<?> deleteProductFromOrder(Product product){
+        return orderService.deleteProductFromOrder(product);
+    }
+
+    @PutMapping("/cart/{id}")
+    public ResponseEntity<?> changeOrderToBought(@PathVariable Long id) {
+        return orderService.changeOrderToBought(id);
+    }
+
+    @GetMapping("/cart")
+    public ResponseEntity<?> getCart() {
+        return orderService.getCart();
     }
 
 }

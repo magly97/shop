@@ -44,6 +44,7 @@ public class Users {
 
     @OneToMany(mappedBy = "userOrder")
     @Getter @Setter
+    @JsonIgnoreProperties("userOrder")
     private List<Orders> orders;
 
     @ManyToMany

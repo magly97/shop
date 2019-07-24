@@ -42,8 +42,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<?> updateProduct(Product product, Long id) {
-        Product existingProduct = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: product not find."));
+        if (productRepository.findById(id).isEmpty()) {
+            return ResponseEntity.badRequest().body("Product to update not found");
+        }
+        Product existingProduct = productRepository.findById(id).get();
 
         BeanUtils.copyProperties(product, existingProduct);
         productRepository.saveAndFlush(existingProduct);

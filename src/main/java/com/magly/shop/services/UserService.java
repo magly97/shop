@@ -13,4 +13,7 @@ public interface UserService {
 
     ResponseEntity<?> updateUser(Users user);
 
+    ResponseEntity<?> userAddAdminRole(Long id);
+
+    ResponseEntity<?> userRemoveAdminRole(Long id);
 }

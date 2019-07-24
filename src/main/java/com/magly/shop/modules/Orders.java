@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,13 +22,29 @@ public class Orders {
     @Getter @Setter
     private Date dateStatus;
 
+    @Getter @Setter
+    private Double price;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @Getter @Setter
+    @JsonIgnoreProperties("orders")
     private Users userOrder;
 
-    @ManyToMany(mappedBy = "orders")
+    public Orders() {
+    }
+
+    public Orders(String status, Date dateStatus, Users userOrder, List<Product> products, Double price) {
+        this.status = status;
+        this.dateStatus = dateStatus;
+        this.userOrder = userOrder;
+        this.products = products;
+        this.price = price;
+    }
+
+    @ManyToMany
     @JsonIgnoreProperties("orders")
-    private List<Product> products;
+    @Getter @Setter
+    private List<Product> products = new ArrayList<>();
 
 }

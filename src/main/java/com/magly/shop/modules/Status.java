@@ -5,10 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
+
 @Entity
-public class Role {
+public class Status {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,14 +19,14 @@ public class Role {
     @Getter
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @OneToMany(mappedBy = "status")
     @Getter @Setter
-    @JsonIgnoreProperties("roles")
-    Set<Users> user;
+    @JsonIgnoreProperties("status")
+    Set<Orders> orderStatus = new HashSet<>();
 
-    public Role(){}
+    public Status(){}
 
-    public Role(String name) {
+    public Status(String name) {
         this.name = name;
     }
 }

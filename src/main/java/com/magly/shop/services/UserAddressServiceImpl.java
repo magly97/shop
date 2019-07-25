@@ -1,5 +1,6 @@
 package com.magly.shop.services;
 
+import com.magly.shop.message.request.AddressForm;
 import com.magly.shop.message.response.ResponseMessage;
 import com.magly.shop.modules.UserAddress;
 import com.magly.shop.modules.Users;
@@ -39,7 +40,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
 
-        if(usersRepository.findByUsername(username).isEmpty()){
+        if (usersRepository.findByUsername(username).isEmpty()) {
             return ResponseEntity.badRequest().body(new ResponseMessage("User error"));
         }
         Users user = usersRepository.findByUsername(username).get();
@@ -50,12 +51,13 @@ public class UserAddressServiceImpl implements UserAddressService {
     }
 
     @Override
-    public ResponseEntity<?> updateAddress(UserAddress address) {
+    public ResponseEntity<?> updateAddress(UserAddress address, Long id) {
 
-       if(userAddressRepository.findById(address.getId()).isEmpty()){
-           return ResponseEntity.badRequest().body(new ResponseMessage("Cannot find address to update"));
-       }
-        UserAddress existingAddress = userAddressRepository.findById(address.getId()).get();
+        if (userAddressRepository.findById(id).isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Cannot find address to update"));
+        }
+
+        UserAddress existingAddress = userAddressRepository.findById(id).get();
 
         BeanUtils.copyProperties(address, existingAddress);
         userAddressRepository.saveAndFlush(existingAddress);

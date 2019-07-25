@@ -10,7 +10,6 @@ import com.magly.shop.repositories.RoleRepository;
 import com.magly.shop.repositories.UsersRepository;
 import com.magly.shop.security.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +40,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     JwtProvider jwtProvider;
 
+    @Autowired
+    private RoleService roleService;
+
     @Override
     public ResponseEntity<?> authenticateUser(LoginForm loginRequest) {
 
@@ -59,14 +61,16 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<?> registerUser(SignUpForm signUpRequest) {
 
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity<>(new ResponseMessage("Fail -> Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(new ResponseMessage("Fail -> Username is already taken!"));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>(new ResponseMessage("Fail -> Email is already in use!"),
-                    HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(new ResponseMessage("Fail -> Email is already in use!"));
         }
+        if (roleRepository.findByName("ROLE_USER").isEmpty() || roleRepository.findByName("ROLE_ADMIN").isEmpty()) {
+            roleService.initRoles();
+        }
+
 
         // Creating user's account
         Users user = new Users(
@@ -75,25 +79,25 @@ public class AuthServiceImpl implements AuthService {
                 signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
-
-        Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
-
-        strRoles.forEach(role -> {
-            if (role.equals("admin")) {
-                Role adminRole = roleRepository.findByName("ROLE_ADMIN")
-                        .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                roles.add(adminRole);
-            } else {
-                Role userRole = roleRepository.findByName("ROLE_USER")
-                        .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                roles.add(userRole);
-            }
-        });
+        try {
+            Set<String> strRoles = signUpRequest.getRole();
+            strRoles.forEach(role -> {
+                if (role.equals("admin")) {
+                    Role adminRole = roleRepository.findByName("ROLE_ADMIN").get();
+                    roles.add(adminRole);
+                } else {
+                    Role userRole = roleRepository.findByName("ROLE_USER").get();
+                    roles.add(userRole);
+                }
+            });
+        } catch (Exception e) {
+            roles.add(roleRepository.findByName("ROLE_USER").get());
+        }
 
         user.setRoles(roles);
         userRepository.saveAndFlush(user);
 
-        return new ResponseEntity<>(new ResponseMessage("User registered successfully!"), HttpStatus.OK);
+        return  ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
     }
 }

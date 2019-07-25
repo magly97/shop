@@ -7,9 +7,9 @@ public interface UserAddressService {
 
     ResponseEntity<?> deleteAddress(Long id);
 
-    ResponseEntity<?> addAddress(UserAddress addressForm);
+    ResponseEntity<?> addAddress(UserAddress address);
 
-    ResponseEntity<?> updateAddress(UserAddress address);
+    ResponseEntity<?> updateAddress(UserAddress address,Long id);
 
     ResponseEntity<?> getAddressById(Long id);
 

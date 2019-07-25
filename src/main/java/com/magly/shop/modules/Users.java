@@ -1,6 +1,7 @@
 package com.magly.shop.modules;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +41,7 @@ public class Users {
     @OneToMany(mappedBy = "userAddress")
     @JsonIgnoreProperties("userAddress")
     @Getter @Setter
-    private Set<UserAddress> addresses = new HashSet<>();
+    private Set<UserAddress> addresses;
 
     @OneToMany(mappedBy = "userOrder")
     @Getter @Setter

@@ -27,6 +27,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseEntity<?> deleteCategory(Long id) {
+        if (categoryRepository.findById(id).isEmpty()) {
+            return ResponseEntity.ok(new ResponseMessage("Category don't exist"));
+        }
+        Category category = categoryRepository.findById(id).get();
+        category.getProducts().forEach(p -> p.getCategories().remove(category));
         categoryRepository.deleteById(id);
         return ResponseEntity.ok(new ResponseMessage("Category deleted"));
     }

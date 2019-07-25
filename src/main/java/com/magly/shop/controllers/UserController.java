@@ -3,13 +3,11 @@ package com.magly.shop.controllers;
 import com.magly.shop.modules.Product;
 import com.magly.shop.modules.UserAddress;
 import com.magly.shop.modules.Users;
-import com.magly.shop.services.OrderService;
 import com.magly.shop.services.OrderServiceImpl;
 import com.magly.shop.services.UserAddressServiceImpl;
 import com.magly.shop.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
@@ -47,13 +45,13 @@ public class UserController {
     }
 
     @PostMapping("/address")
-    public ResponseEntity<?> addAddress(UserAddress address) {
+    public ResponseEntity<?> addAddress(@RequestBody UserAddress address) {
         return userAddressService.addAddress(address);
     }
 
-    @PutMapping("/address")
-    public ResponseEntity<?> updateAddress(UserAddress address) {
-        return userAddressService.updateAddress(address);
+    @PutMapping("/address/{id}")
+    public ResponseEntity<?> updateAddress(@RequestBody UserAddress address, @PathVariable Long id) {
+        return userAddressService.updateAddress(address, id);
     }
 
     @GetMapping("/address/{id}")
@@ -78,7 +76,7 @@ public class UserController {
     }
 
     @GetMapping("/cart/remove/")
-    public ResponseEntity<?> deleteProductFromOrder(Product product){
+    public ResponseEntity<?> deleteProductFromOrder(Product product) {
         return orderService.deleteProductFromOrder(product);
     }
 

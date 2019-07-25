@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
         Set<Category> categorySet = new HashSet<>();
         if (!formSet.isEmpty()) {
             formSet.forEach(category -> categorySet.add(categoryRepository.findByName(category)
-                    .orElseThrow(() -> new RuntimeException("Fail! -> Cause: category " + category + " not find."))));
+                    .orElseThrow(() -> new RuntimeException("Fail! -> Cause: category " + category + " not found."))));
         }
         product.setCategories(categorySet);
         productRepository.saveAndFlush(product);
@@ -70,6 +70,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<?> deleteProduct(Long id) {
+        if (productRepository.findById(id).isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Product don't exist"));
+        }
+        Product product = productRepository.findById(id).get();
+        product.getOrders().forEach(o -> o.getProducts().remove(product));
+        //product.getCategories().forEach(c -> c.getProducts().remove(product));
+        productRepository.saveAndFlush(product);
         productRepository.deleteById(id);
         return new ResponseEntity<>(new ResponseMessage("Product deleted"), HttpStatus.OK);
     }

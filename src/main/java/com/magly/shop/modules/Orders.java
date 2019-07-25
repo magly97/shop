@@ -1,11 +1,11 @@
 package com.magly.shop.modules;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,8 +18,6 @@ public class Orders {
     private Long id;
 
     @Getter @Setter
-    private String status;
-    @Getter @Setter
     private Date dateStatus;
 
     @Getter @Setter
@@ -31,20 +29,25 @@ public class Orders {
     @JsonIgnoreProperties("orders")
     private Users userOrder;
 
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    @JsonIgnoreProperties("orderStatus")
+    @Getter @Setter
+    private Status status;
+
+    @ManyToMany
+    @JsonIgnoreProperties("orders")
+    @Getter @Setter
+    private List<Product> products;
+
     public Orders() {
     }
-
-    public Orders(String status, Date dateStatus, Users userOrder, List<Product> products, Double price) {
+    public Orders(Status status, Date dateStatus, Users userOrder, List<Product> products, Double price) {
         this.status = status;
         this.dateStatus = dateStatus;
         this.userOrder = userOrder;
         this.products = products;
         this.price = price;
     }
-
-    @ManyToMany
-    @JsonIgnoreProperties("orders")
-    @Getter @Setter
-    private List<Product> products = new ArrayList<>();
 
 }

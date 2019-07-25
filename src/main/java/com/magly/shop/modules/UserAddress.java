@@ -37,4 +37,14 @@ public class UserAddress {
     @JsonIgnoreProperties("addresses")
     private Users userAddress;
 
+    public UserAddress(){}
+
+    public UserAddress(@NotNull String city, @NotNull String street, @NotNull String number, @NotNull String zipCode, Users userAddress) {
+        this.city = city;
+        this.street = street;
+        this.number = number;
+        this.zipCode = zipCode;
+        this.userAddress = userAddress;
+    }
+
 }

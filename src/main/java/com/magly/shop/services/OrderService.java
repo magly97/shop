@@ -7,7 +7,7 @@ public interface OrderService {
 
     ResponseEntity<?> addProductToOrder(Long id);
 
-    ResponseEntity<?> deleteProductFromOrder(Product product);
+    ResponseEntity<?> deleteProductFromOrder(Long productId);
 
     ResponseEntity<?> getUserOrderList();
 

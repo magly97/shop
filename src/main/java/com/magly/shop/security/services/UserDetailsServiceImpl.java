@@ -3,7 +3,6 @@ package com.magly.shop.security.services;
 
 import com.magly.shop.modules.Users;
 import com.magly.shop.repositories.UsersRepository;
-import com.magly.shop.security.services.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throws UsernameNotFoundException {
 
         Users user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with -> username: " + username));
 
         return UserPrinciple.build(user);
     }

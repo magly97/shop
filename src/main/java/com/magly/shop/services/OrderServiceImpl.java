@@ -74,14 +74,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<?> deleteProductFromOrder(Product product) {
+    public ResponseEntity<?> deleteProductFromOrder(Long productId) {
 
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (usersRepository.findByUsername(userDetails.getUsername()).isEmpty()) {
             return ResponseEntity.badRequest().body(new ResponseMessage("User error"));
         }
-
+        if(productRepository.findById(productId).isEmpty()){
+            return ResponseEntity.badRequest().body(new ResponseMessage("Product not found"));
+        }
+        Product product = productRepository.findById(productId).get();
         Users user = usersRepository.findByUsername(userDetails.getUsername()).get();
         Date date = new Date();
 
@@ -97,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
             ordersRepository.saveAndFlush(order.get());
             return ResponseEntity.ok(new ResponseMessage("Product deleted"));
         } else {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Cannot find product at order"));
+            return ResponseEntity.badRequest().body(new ResponseMessage("Product not found in the order"));
         }
     }
 

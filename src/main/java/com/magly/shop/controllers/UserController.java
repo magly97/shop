@@ -75,9 +75,9 @@ public class UserController {
         return orderService.getOrderById(id);
     }
 
-    @GetMapping("/cart/remove/")
-    public ResponseEntity<?> deleteProductFromOrder(Product product) {
-        return orderService.deleteProductFromOrder(product);
+    @DeleteMapping("/cart/remove/{productId}")
+    public ResponseEntity<?> deleteProductFromOrder(@PathVariable Long productId) {
+        return orderService.deleteProductFromOrder(productId);
     }
 
     @PutMapping("/cart/{id}")

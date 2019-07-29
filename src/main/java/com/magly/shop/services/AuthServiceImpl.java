@@ -1,5 +1,7 @@
 package com.magly.shop.services;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.magly.shop.message.request.LoginForm;
 import com.magly.shop.message.request.SignUpForm;
 import com.magly.shop.message.response.JwtResponse;
@@ -98,6 +100,6 @@ public class AuthServiceImpl implements AuthService {
         user.setRoles(roles);
         userRepository.saveAndFlush(user);
 
-        return  ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
+        return ResponseEntity.ok(new ResponseMessage("User registered successfully!"));
     }
 }

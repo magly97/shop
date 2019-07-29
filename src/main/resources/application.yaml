@@ -28,4 +28,4 @@ logging:
 magly:
   app:
     jwtSecret: jwtBaguvixHesoyam
-    jwtExpiration: 86400
+    jwtExpiration: 8640000
